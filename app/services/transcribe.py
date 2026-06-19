@@ -6,7 +6,7 @@ model = whisper.load_model("base")
 def transcribe_video(video_path: str) -> str:
     print(f"Transcribing video: {video_path}")
 
-    # word_timestamps=True gives us timing per word!
+    # word_timestamps=True gives us per-word timing for karaoke highlighting
     result = model.transcribe(video_path, word_timestamps=True)
 
     ass_content = generate_ass(result["segments"])

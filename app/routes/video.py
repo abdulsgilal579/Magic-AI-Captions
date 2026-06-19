@@ -27,15 +27,15 @@ async def upload_video_route(file: UploadFile = File(...)):
         tmp_path = tmp.name
 
     # Step 2 — Transcribe with Whisper
-    print("🎤 Transcribing video...")
+    print("Transcribing video...")
     srt_content = transcribe_video(tmp_path)
 
     # Step 3 — Burn captions into video
-    print("🔥 Burning captions into video...")
+    print("Burning captions into video...")
     captioned_video_path = burn_captions(tmp_path, srt_content)
 
     # Step 4 — Upload final captioned video to S3
-    print("☁️ Uploading to S3...")
+    print("Uploading to S3...")
     final_filename = f"captioned/{filename}"
     video_url = upload_video(open(captioned_video_path, "rb"), final_filename)
 
@@ -45,7 +45,7 @@ async def upload_video_route(file: UploadFile = File(...)):
 
     return {
         "job_id": job_id,
-        "message": "Captions burned successfully! 🎬",
+        "message": "Captions burned successfully.",
         "download_url": video_url,
         "captions": srt_content
     }
