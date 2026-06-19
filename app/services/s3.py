@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Abdul Samad Gilal
+# All rights reserved.
+
 import boto3
 from app.config import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME, AWS_S3_BUCKET_NAME
 

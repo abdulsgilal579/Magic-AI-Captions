@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Abdul Samad Gilal
+# All rights reserved.
+
 import whisper
 
 # Load the model once when app starts

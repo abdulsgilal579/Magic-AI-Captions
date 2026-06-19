@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Abdul Samad Gilal
+# All rights reserved.
+
 import os
 import subprocess
 

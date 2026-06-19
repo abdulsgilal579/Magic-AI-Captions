@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Abdul Samad Gilal
+# All rights reserved.
+
 from fastapi import FastAPI
 from app.routes.video import router as video_router
 

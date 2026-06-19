@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Abdul Samad Gilal
+# All rights reserved.
+
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from app.services.s3 import upload_video
