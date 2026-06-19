@@ -2,12 +2,15 @@
 
 A FastAPI service that transcribes a video with OpenAI Whisper, burns word-by-word highlighted captions into it using FFmpeg, and uploads the result to S3.
 
+## Preview
+
+https://github.com/abdulsgilal579/Magic-AI-Captions/blob/main/preview_video/Linkedin.mp4
+
 ## How it works
 
-1. You upload an MP4 to `POST /api/v1/upload`
-2. Whisper transcribes the audio and produces per-word timestamps
-3. FFmpeg burns the captions directly into the video frames using ASS subtitle format with karaoke-style word highlighting
-4. The captioned video is uploaded to S3 and a download URL is returned
+1. `POST /api/v1/upload` — upload your video; Whisper transcribes it and returns the raw ASS caption content
+2. Edit the captions however you like (fix words, adjust timing, change styling)
+3. `POST /api/v1/burn` — send the job ID and your edited captions; FFmpeg burns them into the video and uploads the result to S3
 
 ## Requirements
 
@@ -52,7 +55,7 @@ The API will be available at `http://localhost:8000`. Interactive docs are at `h
 
 ### `POST /api/v1/upload`
 
-Upload a video file to have captions generated and burned in.
+Upload a video. Transcribes it and returns the ASS caption content for review.
 
 **Request:** `multipart/form-data` with a `file` field containing the video.
 
@@ -61,9 +64,33 @@ Upload a video file to have captions generated and burned in.
 ```json
 {
   "job_id": "uuid",
+  "captions": "... ASS subtitle content ...",
+  "message": "Transcription done. Edit the captions if needed, then call /burn."
+}
+```
+
+---
+
+### `POST /api/v1/burn`
+
+Burn the captions into the video and upload to S3.
+
+**Request:** JSON body
+
+```json
+{
+  "job_id": "uuid",
+  "captions": "... ASS subtitle content, edited or unchanged ..."
+}
+```
+
+**Response:**
+
+```json
+{
+  "job_id": "uuid",
   "message": "Captions burned successfully.",
-  "download_url": "https://your-bucket.s3.region.amazonaws.com/captioned/...",
-  "captions": "... ASS subtitle content ..."
+  "download_url": "https://your-bucket.s3.region.amazonaws.com/captioned/..."
 }
 ```
 
