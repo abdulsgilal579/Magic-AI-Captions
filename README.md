@@ -4,7 +4,7 @@ A FastAPI service that transcribes a video with OpenAI Whisper, burns word-by-wo
 
 ## Preview
 
-<video src="preview_video/Linkedin.mp4" controls width="100%"></video>
+<video src="https://raw.githubusercontent.com/abdulsgilal579/Magic-AI-Captions/main/preview_video/Linkedin.mp4" controls width="100%"></video>
 
 ## How it works
 
