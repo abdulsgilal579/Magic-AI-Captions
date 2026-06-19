@@ -119,3 +119,9 @@ app/
 | python-multipart | File upload parsing |
 | python-dotenv | `.env` file loading |
 | ffmpeg-python | FFmpeg subprocess wrapper |
+
+# Copyright (c) 2026 Abdul Samad Gilal
+
+All rights reserved.
+
+This source code and associated files may not be copied, modified, distributed, sublicensed, or used without explicit written permission from the author.
