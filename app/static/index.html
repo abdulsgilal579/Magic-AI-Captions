@@ -7,293 +7,349 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --teal:   #2A9D8F;
+      --gold:   #E9C46A;
+      --orange: #F4A261;
+      --coral:  #E76F51;
+      --bg:     #264653;
+      --card:   #1e3843;
+      --border: rgba(255,255,255,0.10);
+      --dim:    rgba(255,255,255,0.55);
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f0f2f5;
-      color: #1a1a2e;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: #fff;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
     }
 
-    header {
-      background: linear-gradient(135deg, #6c63ff, #a855f7);
-      color: white;
-      padding: 28px 24px;
-      text-align: center;
+    /* ── App name ── */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
     }
-    header h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
-    header p  { margin-top: 6px; opacity: 0.85; font-size: 0.95rem; }
+    .brand-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(140deg, var(--teal), var(--orange));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
 
+    /* ── Steps ── */
     .steps {
       display: flex;
-      justify-content: center;
+      align-items: center;
       gap: 0;
-      padding: 20px 24px 0;
+      margin-bottom: 24px;
     }
     .step {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       font-size: 0.82rem;
       font-weight: 600;
-      color: #aaa;
+      color: var(--dim);
+      transition: color 0.25s;
     }
-    .step.active { color: #6c63ff; }
-    .step.done   { color: #22c55e; }
-    .step-num {
-      width: 24px; height: 24px;
+    .step-dot {
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: #ddd;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
+      background: rgba(255,255,255,0.18);
+      transition: background 0.25s;
     }
-    .step.active .step-num { background: #6c63ff; color: white; }
-    .step.done   .step-num { background: #22c55e; color: white; }
-    .step-sep { width: 40px; height: 2px; background: #ddd; margin: 0 6px; }
-    .step-sep.done { background: #22c55e; }
-
-    main {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 32px 16px 48px;
+    .step.active            { color: var(--teal); }
+    .step.active .step-dot  { background: var(--teal); box-shadow: 0 0 8px var(--teal); }
+    .step.done              { color: var(--gold); }
+    .step.done   .step-dot  { background: var(--gold); }
+    .step-line {
+      width: 36px; height: 1.5px;
+      background: rgba(255,255,255,0.12);
+      margin: 0 10px;
+      transition: background 0.25s;
     }
+    .step-line.done { background: var(--gold); }
 
+    /* ── Card ── */
     .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      padding: 36px 32px;
       width: 100%;
-      max-width: 580px;
+      max-width: 520px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
     }
 
-    .card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
-    .card p.sub { font-size: 0.88rem; color: #666; margin-bottom: 24px; }
+    /* ── Panel ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
 
-    /* Drop zone */
+    /* ── Panel heading ── */
+    .panel-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .panel-sub {
+      font-size: 0.88rem;
+      color: var(--dim);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ── Drop zone ── */
     .drop-zone {
-      border: 2px dashed #c4b5fd;
-      border-radius: 12px;
-      padding: 40px 24px;
+      border: 1.5px dashed rgba(42,157,143,0.45);
+      border-radius: 14px;
+      padding: 48px 20px;
       text-align: center;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      background: rgba(42,157,143,0.04);
+      transition: border-color 0.2s, background 0.2s;
     }
-    .drop-zone:hover, .drop-zone.drag-over {
-      background: #f5f3ff;
-      border-color: #6c63ff;
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--teal);
+      background: rgba(42,157,143,0.09);
     }
-    .drop-icon { font-size: 2.5rem; margin-bottom: 10px; }
-    .drop-zone p { font-size: 0.9rem; color: #666; }
-    .drop-zone strong { color: #6c63ff; }
-    .file-name {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      color: #444;
-      background: #f5f3ff;
-      border-radius: 8px;
-      padding: 8px 12px;
-      display: none;
+    .drop-icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .drop-zone h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
-    .file-name.visible { display: block; }
+    .drop-zone p {
+      font-size: 0.82rem;
+      color: var(--dim);
+    }
     #file-input { display: none; }
 
-    /* Textarea */
+    .file-pill {
+      display: none;
+      margin: 16px auto 0;
+      max-width: 260px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(42,157,143,0.15);
+      border: 1px solid rgba(42,157,143,0.35);
+      font-size: 0.8rem;
+      color: var(--teal);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .file-pill.visible { display: block; }
+
+    /* ── Textarea ── */
     textarea {
       width: 100%;
-      height: 240px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 0.82rem;
-      font-family: "SF Mono", "Fira Code", monospace;
+      height: 220px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      font-family: "SF Mono", ui-monospace, monospace;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.7;
       resize: vertical;
       outline: none;
       transition: border-color 0.2s;
-      color: #333;
     }
-    textarea:focus { border-color: #6c63ff; }
+    textarea:focus { border-color: var(--teal); }
+    textarea::placeholder { color: rgba(255,255,255,0.22); }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 28px;
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 0.95rem;
       font-weight: 600;
+      letter-spacing: -0.1px;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: opacity 0.18s, transform 0.1s;
     }
-    .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-primary { background: linear-gradient(135deg, #6c63ff, #a855f7); color: white; }
-    .btn-primary:hover:not(:disabled) { opacity: 0.9; }
-    .btn-secondary { background: #f0f2f5; color: #444; }
-    .btn-secondary:hover:not(:disabled) { background: #e5e7eb; }
-    .btn-full { width: 100%; margin-top: 20px; }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.28; cursor: not-allowed; }
 
-    /* Spinner */
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+    }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      color: var(--dim);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: rgba(255,255,255,0.11);
+      color: #fff;
+    }
+
+    /* ── Spinner ── */
     .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255,255,255,0.4);
-      border-top-color: white;
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.25);
+      border-top-color: #fff;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.6s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Success */
-    .success-box {
-      background: #f0fdf4;
-      border: 1.5px solid #86efac;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-    }
-    .success-icon { font-size: 2.5rem; margin-bottom: 10px; }
-    .success-box p { font-size: 0.9rem; color: #444; margin-top: 6px; }
-    .download-link {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 10px 22px;
-      background: #22c55e;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .download-link:hover { opacity: 0.9; }
-
-    /* Error */
-    .error-box {
-      margin-top: 16px;
-      background: #fef2f2;
-      border: 1.5px solid #fca5a5;
+    /* ── Error ── */
+    .error {
+      margin-top: 12px;
+      padding: 11px 14px;
       border-radius: 10px;
-      padding: 12px 16px;
+      background: rgba(231,111,81,0.12);
+      border: 1px solid rgba(231,111,81,0.32);
       font-size: 0.85rem;
-      color: #b91c1c;
+      color: var(--coral);
       display: none;
     }
-    .error-box.visible { display: block; }
+    .error.visible { display: block; }
 
-    /* Panels */
-    .panel { display: none; }
-    .panel.active { display: block; }
+    /* ── Done ── */
+    .done-wrap { text-align: center; padding: 12px 0; }
+    .done-ring {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(42,157,143,0.4);
+      background: rgba(42,157,143,0.10);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 20px;
+    }
+    .done-wrap h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .done-wrap p {
+      font-size: 0.88rem;
+      color: var(--dim);
+      margin-top: 6px;
+    }
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--teal), var(--orange));
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: -0.1px;
+      transition: opacity 0.18s;
+    }
+    .btn-download:hover { opacity: 0.88; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>✨ Magic AI Captions</h1>
-  <p>Upload a video, auto-transcribe it, then burn styled captions in.</p>
-</header>
-
-<div class="steps">
-  <div class="step active" id="s1">
-    <div class="step-num">1</div> Upload
-  </div>
-  <div class="step-sep" id="sep1"></div>
-  <div class="step" id="s2">
-    <div class="step-num">2</div> Edit
-  </div>
-  <div class="step-sep" id="sep2"></div>
-  <div class="step" id="s3">
-    <div class="step-num">3</div> Download
-  </div>
+<div class="brand">
+  <div class="brand-icon">✦</div>
+  <span class="brand-name">Magic AI Captions</span>
 </div>
 
-<main>
-  <div class="card">
+<div class="steps">
+  <div class="step active" id="s1"><div class="step-dot"></div>Upload</div>
+  <div class="step-line" id="sep1"></div>
+  <div class="step" id="s2"><div class="step-dot"></div>Edit</div>
+  <div class="step-line" id="sep2"></div>
+  <div class="step" id="s3"><div class="step-dot"></div>Export</div>
+</div>
 
-    <!-- Panel 1: Upload -->
-    <div class="panel active" id="panel-upload">
-      <h2>Upload your video</h2>
-      <p class="sub">Whisper will transcribe the audio and generate ASS captions.</p>
+<div class="card">
 
-      <div class="drop-zone" id="drop-zone">
-        <div class="drop-icon">🎬</div>
-        <p><strong>Click to choose</strong> or drag &amp; drop a video</p>
-        <p style="margin-top:6px; font-size:0.8rem;">MP4, MOV, MKV, AVI …</p>
-        <div class="file-name" id="file-name"></div>
-      </div>
-      <input type="file" id="file-input" accept="video/*" />
+  <!-- Upload -->
+  <div class="panel active" id="panel-upload">
+    <div class="panel-title">Upload your video</div>
+    <div class="panel-sub">Whisper will transcribe the audio automatically.</div>
 
-      <div class="error-box" id="upload-error"></div>
-      <button class="btn btn-primary btn-full" id="btn-upload" disabled>
-        Transcribe Video
-      </button>
+    <div class="drop-zone" id="drop-zone">
+      <div class="drop-icon">🎬</div>
+      <h3>Drop your video here</h3>
+      <p>or click to browse &nbsp;·&nbsp; MP4, MOV, MKV, AVI</p>
+      <div class="file-pill" id="file-name"></div>
     </div>
+    <input type="file" id="file-input" accept="video/*" />
 
-    <!-- Panel 2: Edit -->
-    <div class="panel" id="panel-edit">
-      <h2>Edit captions</h2>
-      <p class="sub">Each block is one subtitle line. Edit the text or timing, then burn.</p>
-
-      <textarea id="captions-area" spellcheck="false" placeholder="00:00:00.00 --> 00:00:03.00&#10;Your caption text here"></textarea>
-
-      <div class="error-box" id="burn-error"></div>
-      <button class="btn btn-primary btn-full" id="btn-burn">
-        Burn Captions into Video
-      </button>
-      <button class="btn btn-secondary btn-full" id="btn-back" style="margin-top:10px;">
-        ← Start Over
-      </button>
-    </div>
-
-    <!-- Panel 3: Done -->
-    <div class="panel" id="panel-done">
-      <div class="success-box">
-        <div class="success-icon">🎉</div>
-        <h2>Captions burned!</h2>
-        <p>Your video is ready. Click below to download it from S3.</p>
-        <a id="download-link" class="download-link" href="#" target="_blank">
-          Download Video
-        </a>
-      </div>
-      <button class="btn btn-secondary btn-full" id="btn-restart" style="margin-top:20px;">
-        Caption another video
-      </button>
-    </div>
-
+    <div class="error" id="upload-error"></div>
+    <button class="btn btn-primary" id="btn-upload" disabled>Transcribe Video</button>
   </div>
-</main>
+
+  <!-- Edit -->
+  <div class="panel" id="panel-edit">
+    <div class="panel-title">Edit captions</div>
+    <div class="panel-sub">Each block is one subtitle. Edit the text or timing freely.</div>
+
+    <textarea id="captions-area" spellcheck="false"
+      placeholder="0:00:00.00 --> 0:00:03.00&#10;Caption text here"></textarea>
+
+    <div class="error" id="burn-error"></div>
+    <button class="btn btn-primary" id="btn-burn">Burn into Video</button>
+    <button class="btn btn-ghost" id="btn-back">Start Over</button>
+  </div>
+
+  <!-- Done -->
+  <div class="panel" id="panel-done">
+    <div class="done-wrap">
+      <div class="done-ring">✓</div>
+      <h2>All done!</h2>
+      <p>Your captioned video is ready to download.</p>
+      <a id="download-link" class="btn-download" href="#" target="_blank">Download Video</a>
+      <button class="btn btn-ghost" id="btn-restart">Caption another video</button>
+    </div>
+  </div>
+
+</div>
 
 <script>
-  const panels    = { upload: 'panel-upload', edit: 'panel-edit', done: 'panel-done' };
-  const steps     = ['s1','s2','s3'];
-  const seps      = ['sep1','sep2'];
   let currentFile = null;
   let jobId       = null;
-  let originalAss = null; // raw ASS from server (header is reused on burn)
+  let originalAss = null;
 
-  /* ── ASS ↔ readable conversion ── */
-
-  // Split a Dialogue line into its 10 fields (Text may contain commas).
+  /* ── ASS ↔ readable ── */
   function parseDialogue(line) {
-    const content = line.slice(10); // drop "Dialogue: "
-    let remaining = content;
+    const content = line.slice(10);
+    let rem = content;
     const parts = [];
     for (let i = 0; i < 9; i++) {
-      const idx = remaining.indexOf(',');
-      parts.push(remaining.slice(0, idx));
-      remaining = remaining.slice(idx + 1);
+      const idx = rem.indexOf(',');
+      parts.push(rem.slice(0, idx));
+      rem = rem.slice(idx + 1);
     }
-    parts.push(remaining); // Text field
+    parts.push(rem);
     return { start: parts[1], end: parts[2], text: parts[9] };
-  }
-
-  // Strip all {...} override tags and collapse whitespace.
-  function stripTags(text) {
-    return text.replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim();
   }
 
   function assToReadable(ass) {
@@ -301,7 +357,8 @@
       .filter(l => l.startsWith('Dialogue:'))
       .map(l => {
         const { start, end, text } = parseDialogue(l);
-        return `${start} --> ${end}\n${stripTags(text)}`;
+        const clean = text.replace(/\{[^}]*\}/g, '').replace(/\s+/g, ' ').trim();
+        return `${start} --> ${end}\n${clean}`;
       })
       .join('\n\n');
   }
@@ -309,8 +366,7 @@
   function readableToAss(readable, origAss) {
     const eventsIdx = origAss.indexOf('[Events]');
     const header = origAss.slice(0, eventsIdx);
-    const formatLine = 'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text';
-
+    const fmt = 'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text';
     const dialogues = readable.trim().split(/\n\n+/)
       .filter(b => b.trim())
       .map(block => {
@@ -318,44 +374,39 @@
         const [start, end] = lines[0].split(' --> ').map(s => s.trim());
         const text = lines.slice(1).join(' ').trim();
         return `Dialogue: 0,${start},${end},Default,,0,0,0,,${text}`;
-      })
-      .join('\n');
-
-    return `${header}[Events]\n${formatLine}\n${dialogues}`;
+      }).join('\n');
+    return `${header}[Events]\n${fmt}\n${dialogues}`;
   }
 
+  /* ── Panel nav ── */
   function showPanel(name) {
-    Object.values(panels).forEach(id => document.getElementById(id).classList.remove('active'));
-    document.getElementById(panels[name]).classList.add('active');
+    ['upload','edit','done'].forEach(n =>
+      document.getElementById('panel-' + n).classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+
     const idx = { upload: 0, edit: 1, done: 2 }[name];
-    steps.forEach((id, i) => {
+    ['s1','s2','s3'].forEach((id, i) => {
       const el = document.getElementById(id);
       el.classList.remove('active','done');
       if (i < idx)  el.classList.add('done');
       if (i === idx) el.classList.add('active');
     });
-    seps.forEach((id, i) => {
-      document.getElementById(id).classList.toggle('done', i < idx);
-    });
+    ['sep1','sep2'].forEach((id, i) =>
+      document.getElementById(id).classList.toggle('done', i < idx));
   }
 
-  function setLoading(btnId, loading, defaultLabel) {
-    const btn = document.getElementById(btnId);
-    btn.disabled = loading;
-    btn.innerHTML = loading
-      ? '<div class="spinner"></div> Please wait…'
-      : defaultLabel;
+  function setLoading(id, on, label) {
+    const btn = document.getElementById(id);
+    btn.disabled = on;
+    btn.innerHTML = on ? '<div class="spinner"></div>' : label;
   }
-
-  function showError(id, msg) {
+  function showErr(id, msg) {
     const el = document.getElementById(id);
     el.textContent = msg;
     el.classList.add('visible');
   }
-  function clearError(id) {
-    const el = document.getElementById(id);
-    el.textContent = '';
-    el.classList.remove('visible');
+  function clearErr(id) {
+    document.getElementById(id).classList.remove('visible');
   }
 
   /* ── Drop zone ── */
@@ -366,7 +417,7 @@
 
   dropZone.addEventListener('click', () => fileInput.click());
   dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-  dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
@@ -382,68 +433,62 @@
     fileLabel.textContent = f.name;
     fileLabel.classList.add('visible');
     btnUpload.disabled = false;
-    clearError('upload-error');
+    clearErr('upload-error');
   }
 
-  /* ── Step 1: Upload & transcribe ── */
+  /* ── Upload ── */
   btnUpload.addEventListener('click', async () => {
     if (!currentFile) return;
-    clearError('upload-error');
+    clearErr('upload-error');
     setLoading('btn-upload', true, 'Transcribe Video');
-
     try {
       const form = new FormData();
       form.append('file', currentFile);
       const res  = await fetch('/api/v1/upload', { method: 'POST', body: form });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Upload failed');
-
       jobId = data.job_id;
       originalAss = data.captions;
       document.getElementById('captions-area').value = assToReadable(data.captions);
       showPanel('edit');
     } catch (err) {
-      showError('upload-error', err.message);
+      showErr('upload-error', err.message);
     } finally {
       setLoading('btn-upload', false, 'Transcribe Video');
     }
   });
 
-  /* ── Step 2: Burn ── */
+  /* ── Burn ── */
   document.getElementById('btn-burn').addEventListener('click', async () => {
-    clearError('burn-error');
-    setLoading('btn-burn', true, 'Burn Captions into Video');
-
+    clearErr('burn-error');
+    setLoading('btn-burn', true, 'Burn into Video');
     try {
       const captions = readableToAss(document.getElementById('captions-area').value, originalAss);
       const res  = await fetch('/api/v1/burn', {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ job_id: jobId, captions }),
+        body: JSON.stringify({ job_id: jobId, captions }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Burn failed');
-
       document.getElementById('download-link').href = data.download_url;
       showPanel('done');
     } catch (err) {
-      showError('burn-error', err.message);
+      showErr('burn-error', err.message);
     } finally {
-      setLoading('btn-burn', false, 'Burn Captions into Video');
+      setLoading('btn-burn', false, 'Burn into Video');
     }
   });
 
-  /* ── Start over ── */
+  /* ── Reset ── */
   function reset() {
-    currentFile = null;
-    jobId       = null;
-    originalAss = null;
+    currentFile = null; jobId = null; originalAss = null;
     fileInput.value = '';
-    fileLabel.classList.remove('visible');
     fileLabel.textContent = '';
+    fileLabel.classList.remove('visible');
     btnUpload.disabled = true;
-    clearError('upload-error');
-    clearError('burn-error');
+    clearErr('upload-error');
+    clearErr('burn-error');
     document.getElementById('captions-area').value = '';
     document.getElementById('download-link').href = '#';
     showPanel('upload');
